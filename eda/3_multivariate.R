@@ -1,5 +1,5 @@
 set.seed(2025)
-dir.create("plots_4", showWarnings = FALSE)
+dir.create("plots", showWarnings = FALSE)
 
 if (!require("tidyverse")) install.packages("tidyverse")
 if (!require("ggplot2")) install.packages("ggplot2")
@@ -79,8 +79,8 @@ hyp <- list(
 
 tag_theme <- function() {
   theme(
-    plot.tag          = element_text(size = 8.5, color = "black",
-                                     face = "italic", hjust = 0),
+    plot.tag          = element_text(size = 11, color = "black",
+                                     face = "bold.italic", hjust = 0),
     plot.tag.position = "top"
   )
 }
@@ -117,8 +117,8 @@ g_h5_rain <- df %>%
         panel.grid.minor = element_blank()) +
   tag_theme()
 
-ggsave("plots_4/plot_h5_raincloud_difficulty.png", g_h5_rain,
-       width = 10, height = 5, dpi = 150)
+ggsave("plots/plot_h5_raincloud_difficulty.png", g_h5_rain,
+       width = 10, height = 5, dpi = 150, create.dir = TRUE)
 
 
 monthly_stats <- df %>%
@@ -166,8 +166,8 @@ g_h5_patch <- (p1 / p2 / p3) +
     )
   )
 
-ggsave("plots_4/plot_h5_patchwork_trends.png", g_h5_patch,
-       width = 10, height = 10, dpi = 150)
+ggsave("plots/plot_h5_patchwork_trends.png", g_h5_patch,
+       width = 10, height = 10, dpi = 150, create.dir = TRUE)
 
 
 slope_data <- df_top %>%
@@ -199,18 +199,25 @@ g_h5_slope <- slope_data_full %>%
   ggplot(aes(x = era_num, y = avg_quality,
              group = programming_language, color = programming_language)) +
   geom_line(aes(alpha = alp, linewidth = lwd)) +
-  geom_point(size = 3) +
+  geom_point(size = 4) +
   geom_text_repel(
     data = . %>% filter(era_num == 2),
-    aes(label = as.character(programming_language),
-        fontface = if_else(programming_language %in% highlight_langs, "bold", "plain")),
-    nudge_x = 0.08, hjust = 0, size = 3.2, segment.color = "black",
-    max.overlaps = 20, direction = "y", box.padding = 0.25
+    aes(label = as.character(programming_language)),
+    nudge_x = 0.12, hjust = 0, size = 4.5, fontface = "bold",
+    color = "black", segment.color = "grey50",
+    max.overlaps = 30, direction = "y", box.padding = 0.3
+  ) +
+  geom_text_repel(
+    data = . %>% filter(era_num == 1),
+    aes(label = as.character(programming_language)),
+    nudge_x = -0.12, hjust = 1, size = 4.5, fontface = "bold",
+    color = "black", segment.color = "grey50",
+    max.overlaps = 30, direction = "y", box.padding = 0.3
   ) +
   scale_x_continuous(breaks = 1:2,
                      labels = c("До ChatGPT\n(2021–2022)",
                                 "Після ChatGPT\n(2023–2025)"),
-                     limits = c(0.8, 2.75)) +
+                     limits = c(0.3, 2.9)) +
   scale_alpha_identity() +
   scale_linewidth_identity() +
   scale_color_manual(values = scales::hue_pal()(length(top_langs)), guide = "none") +
@@ -221,15 +228,17 @@ g_h5_slope <- slope_data_full %>%
     x        = NULL,
     y        = "Середня оцінка якості запитань"
   ) +
-  theme_minimal(base_size = 13) +
-  theme(plot.title         = element_text(face = "bold", size = 12),
-        plot.subtitle      = element_text(size = 10, color = "black"),
+  theme_minimal(base_size = 15) +
+  theme(plot.title         = element_text(face = "bold", size = 15, color = "black"),
+        plot.subtitle      = element_text(size = 12, color = "black"),
+        axis.text          = element_text(size = 13, color = "black", face = "bold"),
+        axis.title.y       = element_text(size = 13, color = "black"),
         panel.grid.major.x = element_blank(),
         panel.grid.minor   = element_blank()) +
   tag_theme()
 
-ggsave("plots_4/plot_h5_slope_quality_lang.png", g_h5_slope,
-       width = 10, height = 6.5, dpi = 150)
+ggsave("plots/plot_h5_slope_quality_lang.png", g_h5_slope,
+       width = 10, height = 6.5, dpi = 150, create.dir = TRUE)
 
 
 heatmap_data <- df_top %>%
@@ -274,8 +283,8 @@ g_h7_heat <- heatmap_data %>%
   ) +
   tag_theme()
 
-ggsave("plots_4/plot_h7_heatmap_lang_year.png", g_h7_heat,
-       width = 13, height = 7, dpi = 150)
+ggsave("plots/plot_h7_heatmap_lang_year.png", g_h7_heat,
+       width = 13, height = 7, dpi = 150, create.dir = TRUE)
 
 
 g_h7_violin <- df_top %>%
@@ -316,8 +325,8 @@ g_h7_violin <- df_top %>%
   ) +
   tag_theme()
 
-ggsave("plots_4/plot_h7_violin_response_era.png", g_h7_violin,
-       width = 12, height = 9, dpi = 150)
+ggsave("plots/plot_h7_violin_response_era.png", g_h7_violin,
+       width = 12, height = 9, dpi = 150, create.dir = TRUE)
 
 
 lang_resp <- df_top %>%
@@ -356,8 +365,8 @@ g_h7_lollipop <- lang_resp %>%
   ) +
   tag_theme()
 
-ggsave("plots_4/plot_h7_lollipop_response.png", g_h7_lollipop,
-       width = 10, height = 6, dpi = 150)
+ggsave("plots/plot_h7_lollipop_response.png", g_h7_lollipop,
+       width = 10, height = 6, dpi = 150, create.dir = TRUE)
 
 
 g_h6_hex_rep <- df %>%
@@ -394,8 +403,8 @@ g_h6_hex_rep <- df %>%
   ) +
   tag_theme()
 
-ggsave("plots_4/plot_h6_hexbin_rep_code.png", g_h6_hex_rep,
-       width = 12, height = 6, dpi = 150)
+ggsave("plots/plot_h6_hexbin_rep_code.png", g_h6_hex_rep,
+       width = 12, height = 6, dpi = 150, create.dir = TRUE)
 
 
 lang_diff_all <- df %>%
@@ -424,14 +433,6 @@ g_h3_dot <- lang_diff_all %>%
   geom_segment(aes(x = q25, xend = q75, yend = lang_ord),
                linewidth = 2.2, alpha = 0.28) +
   geom_point(aes(size = n), alpha = 0.9) +
-  geom_text_repel(
-    aes(label = as.character(programming_language)),
-    size = 2.8, fontface = "bold", show.legend = FALSE,
-    max.overlaps = 30, box.padding = 0.3, min.segment.length = 0.2,
-    direction = "y"
-  ) +
-  annotate("text", x = overall_med + 0.02, y = 2,
-           label = "Загальна\nмедіана", size = 2.8, color = "black", hjust = 0) +
   scale_color_manual(
     values = c("FALSE" = "#1565C0", "TRUE" = "#C62828"),
     labels = c("Нижче загальної медіани", "Вище загальної медіани"),
@@ -439,23 +440,28 @@ g_h3_dot <- lang_diff_all %>%
   ) +
   scale_size_continuous(range = c(2, 9), name = "К-сть питань",
                         labels = label_number(big.mark = " ")) +
+  scale_x_continuous(expand = expansion(mult = c(0.01, 0.04))) +
   labs(
-    tag   = hyp$h3,
-    title = "Мова програмування — головний чинник складності: Rust і Haskell найскладніші",
-    x     = "Медіана оцінки складності  (відрізок = IQR)",
-    y     = NULL
+    tag     = hyp$h3,
+    title   = "Мова програмування — головний чинник складності: Rust і Haskell найскладніші",
+    x       = "Медіана оцінки складності  (відрізок = IQR)          ↑ пунктир = загальна медіана",
+    y       = NULL
   ) +
-  theme_minimal(base_size = 11) +
+  theme_minimal(base_size = 13) +
   theme(
-    plot.title         = element_text(face = "bold", size = 11),
+    plot.title         = element_text(face = "bold", size = 13, color = "black"),
+    axis.text          = element_text(size = 12, color = "black", face = "bold"),
+    axis.title.x       = element_text(size = 11, color = "black"),
+    legend.text        = element_text(size = 11, color = "black"),
+    legend.title       = element_text(size = 11, color = "black"),
     panel.grid.major.y = element_line(color = "grey93"),
     panel.grid.minor   = element_blank(),
     legend.position    = "bottom"
   ) +
   tag_theme()
 
-ggsave("plots_4/plot_h3_dotplot_difficulty.png", g_h3_dot,
-       width = 10, height = 9, dpi = 150)
+ggsave("plots/plot_h3_dotplot_difficulty.png", g_h3_dot,
+       width = 10, height = 9, dpi = 150, create.dir = TRUE)
 
 
 g_h3_rep_diff <- df %>%
@@ -489,8 +495,8 @@ g_h3_rep_diff <- df %>%
   ) +
   tag_theme()
 
-ggsave("plots_4/plot_h3_2d_rep_difficulty_code.png", g_h3_rep_diff,
-       width = 12, height = 6, dpi = 150)
+ggsave("plots/plot_h3_2d_rep_difficulty_code.png", g_h3_rep_diff,
+       width = 12, height = 6, dpi = 150, create.dir = TRUE)
 
 
 g_h8_density <- df %>%
@@ -517,8 +523,8 @@ g_h8_density <- df %>%
         panel.grid.minor = element_blank()) +
   tag_theme()
 
-ggsave("plots_4/plot_h8_2d_density_answer.png", g_h8_density,
-       width = 10, height = 6.5, dpi = 150)
+ggsave("plots/plot_h8_2d_density_answer.png", g_h8_density,
+       width = 10, height = 6.5, dpi = 150, create.dir = TRUE)
 
 
 g_h8_facet <- df %>%
@@ -554,8 +560,8 @@ g_h8_facet <- df %>%
   ) +
   tag_theme()
 
-ggsave("plots_4/plot_h8_hexbin_facet_difficulty.png", g_h8_facet,
-       width = 14, height = 5.5, dpi = 150)
+ggsave("plots/plot_h8_hexbin_facet_difficulty.png", g_h8_facet,
+       width = 14, height = 5.5, dpi = 150, create.dir = TRUE)
 
 
 g_h7_hex_lang <- df_top %>%
@@ -586,5 +592,5 @@ g_h7_hex_lang <- df_top %>%
   ) +
   tag_theme()
 
-ggsave("plots_4/plot_h7_hexbin_words_bylang.png", g_h7_hex_lang,
-       width = 14, height = 8, dpi = 150)
+ggsave("plots/plot_h7_hexbin_words_bylang.png", g_h7_hex_lang,
+       width = 14, height = 8, dpi = 150, create.dir = TRUE)
