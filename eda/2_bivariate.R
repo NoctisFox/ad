@@ -25,8 +25,8 @@ df <- df %>%
     creation_date = ymd_hms(creation_date),
     creation_month_year = floor_date(creation_date, "month"),
     creation_weekday = factor(creation_weekday,
-                              levels = 1:7,
-                              labels = c("Пн", "Вв", "Ср", "Чт", "Пт", "Сб", "Нд"))
+                              levels = 0:6,
+                              labels = c("Нд", "Пн", "Вт", "Ср", "Чт", "Пт", "Сб"))
   )
 
 # Загальна тема для всіх графіків
